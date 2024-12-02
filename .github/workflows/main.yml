@@ -1,4 +1,4 @@
-name: Publish FFL Component
+name: Master FFL Layers
 
 on:
   workflow_dispatch:
@@ -7,7 +7,7 @@ on:
     inputs:
       component:
         type: choice
-        description: Choose Component
+        description: Choose Layer
         options: 
         - DB-LAYER
         default: DB-LAYER
@@ -25,7 +25,7 @@ on:
     types: [created]
 env:
   NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-  COMPONENT_PATH: $(echo "${{ github.event.inputs.component }}" | tr '[:upper:]' '[:lower:]')
+  LAYERS_PATH: $(echo "${{ github.event.inputs.component }}" | tr '[:upper:]' '[:lower:]')
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   AWS_DEFAULT_REGION: ${{ vars.region }}
@@ -61,21 +61,21 @@ jobs:
       - name: PATCH VERSIONING
         if: "${{ github.event.inputs.version == 'PATCH' }}"
         run: | 
-             cd "${{env.COMPONENT_PATH}}-component" && npm version patch -m "Upgrade to %s"
+             cd "${{env.LAYERS_PATH}}" && npm version patch -m "Upgrade to %s"
 
       - name: MINOR VERSIONING
         if: "${{ github.event.inputs.version =='MINOR' }}"
-        run: cd "${{env.COMPONENT_PATH}}-component" && npm version minor -m "Upgrade to %s"
+        run: cd "${{env.LAYERS_PATH}}" && npm version minor -m "Upgrade to %s"
 
       - name: MAJOR VERSIONING
         if: "${{ github.event.inputs.version == 'MAJOR' }}"
-        run: cd "${{env.COMPONENT_PATH}}-component" && npm version major -m "Upgrade to %s"
+        run: cd "${{env.LAYERS_PATH}}" && npm version major -m "Upgrade to %s"
 
       - name: Update Package json file
-        run: cd "${{env.COMPONENT_PATH}}-component" && git status && git add package.json && git commit -m "package.json" && git push &&  git diff HEAD^ HEAD
+        run: cd "${{env.LAYERS_PATH}}" && git status && git add package.json && git commit -m "package.json" && git push &&  git diff HEAD^ HEAD
 
       - name: Build & Publish Component
-        run: cd "${{env.COMPONENT_PATH}}-component" && npm install && npm run build && npm publish
+        run: cd "${{env.LAYERS_PATH}}" && npm install && npm run build && npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
           libs_bucket: ${{ secrets.LIBS_BUCKET }}
