@@ -1,0 +1,23 @@
+{
+  "name": "@masterffl/db-layer-package",
+  "author": "milan varshney",
+  "version": "2.0.0",
+  "description": "",
+  "main": "db-auth.js",
+  "scripts": {
+    "postinstall": "cp ./db-auth.js ./node_modules && cp -r ./models ./node_modules/ffl-models"
+  },
+  "dependencies": {
+    "cls-hooked": "^4.2.2",
+    "pg": "^8.8.0",
+    "pg-promise": "^10.12.1",
+    "sequelize": "^6.28.0",
+    "sequelize-cursor-pagination": "^3.4.0",
+    "sequelize-paginate": "^1.1.6"
+  },
+  "keywords": [],
+  "license": "ISC",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/@MasterFFL/"
+  }
+}
